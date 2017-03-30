@@ -74,7 +74,7 @@ class Game {
         setInterval(function(){self.tick();},self.tickTime);
     };
 
-    checkSidesForPile(){
+    checkPartForPile(){
         var check = false;
             for (var i = 0; i < this.part.dotRows.length; i++) {
                 for (var j = 0; j < this.pileRows.length; j++) {
@@ -86,23 +86,12 @@ class Game {
         return check;
     };
 
-    checkDotForPile(){
-        var check = false;
-        for (var i = 0; i < this.part.dotRows.length; i++){
-            for (var j = 0; j < this.pileRows.length; j++){
-                if ((this.part.dotRows[i] == this.pileRows[j] - 1) && (this.part.dotCols[i] == this.pileCols[j])){
-                    check = true;
-                };
-            };
-        };
-        return check;
-    };
 
     moveLeft() {
         this.part.clear();
         this.part.bottomCol--;
         this.part.rotate();
-            if (this.part.checkLeftBoarder()||this.checkSidesForPile()) {
+            if (this.part.checkLeftBoarder()||this.checkPartForPile()) {
                 this.part.bottomCol++;
                 this.part.rotate();
         };
@@ -113,7 +102,7 @@ class Game {
         this.part.clear();
         this.part.bottomCol++;
         this.part.rotate();
-            if (this.part.checkRightBoarder()||this.checkSidesForPile()) {
+            if (this.part.checkRightBoarder()||this.checkPartForPile()) {
                 this.part.bottomCol--;
                 this.part.rotate();
         };
@@ -123,7 +112,7 @@ class Game {
     rotateLeft(){
         this.part.clear();
         this.part.changeRotationLeft();
-        if (this.part.checkRightBoarder()||this.checkSidesForPile()||this.part.checkLeftBoarder()){
+        if (this.part.checkRightBoarder()||this.checkPartForPile()||this.part.checkLeftBoarder()){
             this.part.changeRotationRight();
         };
         this.part.show();
@@ -132,7 +121,7 @@ class Game {
     rotateRight(){
         this.part.clear();
         this.part.changeRotationRight();
-        if (this.part.checkRightBoarder()||this.checkSidesForPile()||this.part.checkRightBoarder()){
+        if (this.part.checkRightBoarder()||this.checkPartForPile()||this.part.checkLeftBoarder()){
             this.part.changeRotationLeft();
         };
         this.part.show();
@@ -140,7 +129,9 @@ class Game {
 
 
     addToPile() {
-        if ((this.part.checkBotBoarder())||(this.checkDotForPile())){
+        if ((this.part.checkBotBoarder())||(this.checkPartForPile())){
+            this.part.moveUp();
+            this.part.show();
             for (var i = 0; i < this.part.dotRows.length; i++ ){
                 this.pileCols.push(this.part.dotCols[i]);
                 this.pileRows.push(this.part.dotRows[i]);
@@ -171,11 +162,10 @@ class Game {
         for (var i = row; i > 0; i--){
             for (var j = 0; j < table.rows[i].cells.length; j++){
                 table.rows[i].cells[j].style.backgroundColor = table.rows[i-1].cells[j].style.backgroundColor;
-                //table.rows[i].cells[j].style.backgroundColor = 'red';
             };
         };
         for (var i = 0; i < table.rows[0].cells.length; i++){
-            table.rows[0].cells[i].style.backgroundColor = 'red';
+            table.rows[0].cells[i].style.backgroundColor = 'white';
         };
     };
 
@@ -184,16 +174,14 @@ class Game {
         if (fullRows.length > 0 ) {
             for (var i = 0; i < fullRows.length; i++) {
                 for (var j = this.pileRows.length; j >= 0; j--) {
-                    if (this.pileRows[j] < fullRows[i]) {
-                        this.pileRows[j]++;
-                    };
-
                     if (fullRows[i] == this.pileRows[j]) {
                         this.pileRows.splice(j, 1);
                         this.pileCols.splice(j, 1);
+                    } else if (this.pileRows[j] < fullRows[i]) {
+                        this.pileRows[j]++;
                     };
                 };
-                this.removeRow(i);
+                this.removeRow(fullRows[i]);
             };
         };
     };
@@ -201,8 +189,9 @@ class Game {
     tick(){
         this.part.clear();
         this.part.moveDown();
-        this.part.show();
         this.addToPile();
+        this.part.show();
+
 
     };
 

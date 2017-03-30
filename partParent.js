@@ -12,10 +12,12 @@ class Part {
     };
 
     moveDown() {
-        /*for (var i = 0; i < this.dotRows.length; i++){
-            this.dotRows[i]++;
-        };*/
         this.bottomRow++;
+        this.rotate();
+    };
+
+    moveUp() {
+        this.bottomRow--;
         this.rotate();
     };
 
@@ -45,10 +47,11 @@ class Part {
         return check;
     };
 
+
     checkBotBoarder(){
         var check = false;
         for (var i = 0; i < this.dotRows.length; i++) {
-            if (this.dotRows[i] == table.rows.length - 1) {
+            if (this.dotRows[i] == table.rows.length) {
                 check = true;
             };
         };
@@ -59,7 +62,7 @@ class Part {
 
 
         for (var i = 0; i < this.dotRows.length; i++){
-            if (this.checkTopBoarder(i)) {
+            if ((this.checkTopBoarder(i))&&(this.dotRows[i] < table.rows.length)) {
                 table.rows[this.dotRows[i]].cells[this.dotCols[i]].style.backgroundColor = this.color;
             };
         };
@@ -67,7 +70,7 @@ class Part {
 
     clear() {
         for (var i = 0; i < this.dotRows.length; i++){
-            if (this.checkTopBoarder(i)) {
+            if ((this.checkTopBoarder(i))&&(this.dotRows[i] < table.rows.length)) {
                 table.rows[this.dotRows[i]].cells[this.dotCols[i]].style.backgroundColor = "white";
             };
         };
