@@ -1,12 +1,28 @@
 class Game {
     constructor(speed){
-        this.randomPart();
-        this.fieldColor = 'white';
         this.pileCols = [];
         this.pileRows = [];
         this.pileColors = [];
+        // this.part = new Ipart(20,5);
+        // this.part.rotate();
+        // this.addToPile();
+        // this.part = new Ipart(19,5);
+        // this.part.rotate();
+        // this.addToPile();
+        // this.part = new Ipart(18,5);
+        // this.part.rotate();
+        // this.addToPile();
+        // this.part = new Ipart(17,5);
+        // this.part.rotate();
+        // this.addToPile();
+        // this.part = new Ipart(16,5);
+        // this.part.rotate();
+        // this.addToPile();
+        // this.showPile();
+        this.randomPart();
+        this.fieldColor = 'white';
         this.tickTime = 1100 - 100*speed;
-        this.part.show();
+        //this.part.show();
         var self = this;
         body.onkeydown = function(e){
             if (e.keyCode == 37){
@@ -25,7 +41,7 @@ class Game {
     };
 
     randomPart(){
-        var rand = Math.floor(Math.random() * 7);
+      var rand = Math.floor(Math.random() * 7);
 
         switch (rand) {
             case 0:
@@ -59,31 +75,35 @@ class Game {
         };
     };
 
-    colorBoard(){
-        for (var i = 0; i < table.rows.length; i++){
-            for (var j = 0; j < table.rows[i].cells.length; j++){
-                table.rows[i].cells[j].style.backgroundColor = this.fieldColor;
-            };
-
-        };
-
-    };
+    // colorBoard(){
+    //     for (var i = 0; i < table.rows.length; i++){
+    //         for (var j = 0; j < table.rows[i].cells.length; j++){
+    //             table.rows[i].cells[j].style.backgroundColor = this.fieldColor;
+    //         };
+    //
+    //     };
+    //
+    // };
 
     startGame(){
         var self = this;
-        this.colorBoard('white');
+   //     this.colorBoard();
         setInterval(function(){self.tick();},self.tickTime);
     };
 
         showPile(){
-        for (var i = 0; i < this.pileRows[i]; i++){
-            table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.pileColors[i];
+        for (var i = 0; i < this.pileRows.length; i++){
+            if (this.pileRows[i] >= 0) {
+                table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.pileColors[i];
+            };
         };
     };
 
     clearPile(){
-        for (var i = 0; i < this.pileRows[i]; i++){
-            table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.fieldColor;
+        for (var i = 0; i < this.pileRows.length; i++){
+            if (this.pileRows[i] >= 0) {
+                table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.fieldColor;
+            };
         };
     };
 
@@ -143,16 +163,17 @@ class Game {
 
 
     addToPile() {
+
         if ((this.part.checkBotBoarder())||(this.checkPartForPile())){
             this.part.moveUp();
             for (var i = 0; i < this.part.dotRows.length; i++ ){
                 this.pileCols.push(this.part.dotCols[i]);
                 this.pileRows.push(this.part.dotRows[i]);
                 this.pileColors.push(this.part.color);
-                this.removeFullRows();
             };
+            this.removeFullRows();
+            this.randomPart();
             this.showPile();
-           this.randomPart();
         };
     };
 
@@ -189,10 +210,9 @@ class Game {
     removeFullRows(){
         this.clearPile();
         var fullRows = this.getFullRows();
-        if (fullRows.length > 0 ) {
             for (var i = 0; i < fullRows.length; i++) {
                 for (var j = this.pileRows.length; j >= 0; j--) {
-                    if (fullRows[i] == this.pileRows[j]) {
+                    if (fullRows[i] === this.pileRows[j]) {
                         this.pileRows.splice(j, 1);
                         this.pileCols.splice(j, 1);
                         this.pileColors.splice(j, 1);
@@ -202,7 +222,6 @@ class Game {
                 };
                 //this.removeRow(fullRows[i]);
             };
-        };
         this.showPile();
     };
 
