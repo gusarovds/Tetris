@@ -1,6 +1,7 @@
 class Game {
     constructor(speed){
         this.randomPart();
+        this.fieldColor = 'white';
         this.pileCols = [];
         this.pileRows = [];
         this.tickTime = 1100 - 100*speed;
@@ -57,8 +58,19 @@ class Game {
         };
     };
 
+    colorBoard(){
+        for (var i = 0; i < table.rows.length; i++){
+            for (var j = 0; j < table.rows[i].cells.length; j++){
+                table.rows[i].cells[j].style.backgroundColor = this.fieldColor;
+            };
+
+        };
+
+    };
+
     startGame(){
         var self = this;
+        this.colorBoard('white');
         setInterval(function(){self.tick();},self.tickTime);
     };
 
@@ -88,16 +100,9 @@ class Game {
 
     moveLeft() {
         this.part.clear();
-        /*for (var i = 0; i < this.part.dotRows.length; i++){
-            this.part.dotCols[i]--;
-        };*/
         this.part.bottomCol--;
         this.part.rotate();
             if (this.part.checkLeftBoarder()||this.checkSidesForPile()) {
-                /*for (var i = 0; i < this.part.dotRows.length; i++){
-                    this.part.dotCols[i]++;
-
-            };*/
                 this.part.bottomCol++;
                 this.part.rotate();
         };
@@ -106,16 +111,9 @@ class Game {
 
     moveRight() {
         this.part.clear();
-        /*for (var i = 0; i < this.part.dotRows.length; i++){
-            this.part.dotCols[i]++;
-        };*/
         this.part.bottomCol++;
         this.part.rotate();
             if (this.part.checkRightBoarder()||this.checkSidesForPile()) {
-                /*for (var i = 0; i < this.part.dotRows.length; i++){
-                    this.part.dotCols[i]--;
-
-            };*/
                 this.part.bottomCol--;
                 this.part.rotate();
         };
@@ -154,9 +152,10 @@ class Game {
 
     getFullRows(){
         var fullRows = [];
+        var dotsInRow = 0;
         for (var i = 0; i < table.rows.length; i++){
-            var dotsInRow = 0;
-            for (var j = 0; j < this.pileRows.length; i++){
+            dotsInRow = 0;
+            for (var j = 0; j < this.pileRows.length; j++){
                 if (this.pileRows[j] == i) {
                     dotsInRow++;
                 };
@@ -172,34 +171,39 @@ class Game {
         for (var i = row; i > 0; i--){
             for (var j = 0; j < table.rows[i].cells.length; j++){
                 table.rows[i].cells[j].style.backgroundColor = table.rows[i-1].cells[j].style.backgroundColor;
+                //table.rows[i].cells[j].style.backgroundColor = 'red';
             };
         };
-        for (var i = 0; i < table.rows[0].cells.length; j++){
-            table.rows[0].cells[i].style.backgroundColor = 'white';
+        for (var i = 0; i < table.rows[0].cells.length; i++){
+            table.rows[0].cells[i].style.backgroundColor = 'red';
         };
     };
 
     removeFullRows(){
         var fullRows = this.getFullRows();
-        for (var i = 0; i < fullRows.length; i++){
-            for (var j = 0; i < this.pileRows.length; i++){
-                if (fullRows[i] == this.pileRows[j]){
-                    this.pileRows.splice(j,1);
-                    this.pileCols.splice(j,1);
-                    j--;
+        if (fullRows.length > 0 ) {
+            for (var i = 0; i < fullRows.length; i++) {
+                for (var j = this.pileRows.length; j >= 0; j--) {
+                    if (this.pileRows[j] < fullRows[i]) {
+                        this.pileRows[j]++;
+                    };
+
+                    if (fullRows[i] == this.pileRows[j]) {
+                        this.pileRows.splice(j, 1);
+                        this.pileCols.splice(j, 1);
+                    };
                 };
+                this.removeRow(i);
             };
-            removeRow(i);
         };
     };
 
     tick(){
-        if (this.part.checkBotBoarder()){table.rows[0].cells[0].style.backgroundColor = "red";};
         this.part.clear();
         this.part.moveDown();
         this.part.show();
         this.addToPile();
-        //this.removeFullRows();
+
     };
 
 };
