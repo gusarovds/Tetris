@@ -59,8 +59,6 @@ class Part {
     };
 
     show() {
-
-
         for (var i = 0; i < this.dotRows.length; i++){
             if ((this.checkTopBoarder(i))&&(this.dotRows[i] < table.rows.length)) {
                 table.rows[this.dotRows[i]].cells[this.dotCols[i]].style.backgroundColor = this.color;
