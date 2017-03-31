@@ -1,7 +1,7 @@
 
 class Opart extends Part {
 
-    rotate() {
+    assemble() {
         this.dotRows[0] = this.bottomRow;
         this.dotCols[0] = this.bottomCol;
          
@@ -20,7 +20,7 @@ class Opart extends Part {
 
 class Ipart extends Part {
 
-    rotate() {
+    assemble() {
         if ((this.rotation == 0)||(this.rotation == 2)){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;
@@ -54,7 +54,7 @@ class Ipart extends Part {
 
 class Zpart extends Part {
 
-    rotate() {
+    assemble() {
         if ((this.rotation == 0)||(this.rotation == 2)){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;
@@ -87,7 +87,7 @@ class Zpart extends Part {
 
 class ZpartRev extends Part {
 
-    rotate() {
+    assemble() {
         if ((this.rotation == 0)||(this.rotation == 2)){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;
@@ -121,7 +121,7 @@ class ZpartRev extends Part {
 
 class Tpart extends Part {
 
-    rotate() {
+    assemble() {
         if (this.rotation == 0){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;
@@ -182,7 +182,7 @@ class Tpart extends Part {
 
 class Lpart extends Part {
 
-    rotate() {
+    assemble() {
         if (this.rotation == 0){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;
@@ -243,7 +243,7 @@ class Lpart extends Part {
 
 class LpartRev extends Part {
 
-    rotate() {
+    assemble() {
         if (this.rotation == 0){
             this.dotRows[0] = this.bottomRow;
             this.dotCols[0] = this.bottomCol;

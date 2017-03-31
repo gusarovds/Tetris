@@ -3,26 +3,11 @@ class Game {
         this.pileCols = [];
         this.pileRows = [];
         this.pileColors = [];
-        // this.part = new Ipart(20,5);
-        // this.part.rotate();
-        // this.addToPile();
-        // this.part = new Ipart(19,5);
-        // this.part.rotate();
-        // this.addToPile();
-        // this.part = new Ipart(18,5);
-        // this.part.rotate();
-        // this.addToPile();
-        // this.part = new Ipart(17,5);
-        // this.part.rotate();
-        // this.addToPile();
-        // this.part = new Ipart(16,5);
-        // this.part.rotate();
-        // this.addToPile();
-        // this.showPile();
+        this.randomPart();
+        this.part = this.nextPart;
         this.randomPart();
         this.fieldColor = 'white';
         this.tickTime = 1100 - 100*speed;
-        //this.part.show();
         var self = this;
         body.onkeydown = function(e){
             if (e.keyCode == 37){
@@ -45,50 +30,39 @@ class Game {
 
         switch (rand) {
             case 0:
-                this.part = new Opart(0,4);
-                this.part.color = 'Crimson';
+                this.nextPart = new Opart(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'Crimson';
                 break;
             case 1:
-                this.part = new Ipart(0,4);
-                this.part.color = 'BlueViolet';
+                this.nextPart = new Ipart(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'BlueViolet';
                 break;
             case 2:
-                this.part = new Tpart(0,4);
-                this.part.color = 'DarkCyan';
+                this.nextPart = new Tpart(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'DarkCyan';
                 break;
             case 3:
-                this.part = new Zpart(0,4);
-                this.part.color = 'DeepSkyBlue';
+                this.nextPart = new Zpart(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'DeepSkyBlue';
                 break;
             case 4:
-                this.part = new Lpart(0,4);
-                this.part.color = 'LawnGreen';
+                this.nextPart = new Lpart(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'LawnGreen';
                 break;
             case 5:
-                this.part = new ZpartRev(0,4);
-                this.part.color = 'DarkOrange';
+                this.nextPart = new ZpartRev(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'DarkOrange';
                 break;
             case 6:
-                this.part = new LpartRev(0,4);
-                this.part.color = 'Tomato';
+                this.nextPart = new LpartRev(0,Math.floor(table.rows[1].cells.length/2-1));
+                this.nextPart.color = 'Tomato';
                 break;
         };
     };
 
-    // colorBoard(){
-    //     for (var i = 0; i < table.rows.length; i++){
-    //         for (var j = 0; j < table.rows[i].cells.length; j++){
-    //             table.rows[i].cells[j].style.backgroundColor = this.fieldColor;
-    //         };
-    //
-    //     };
-    //
-    // };
-
     startGame(){
         var self = this;
-   //     this.colorBoard();
-        setInterval(function(){self.tick();},self.tickTime);
+        this.ticktack = setInterval(function(){self.tick();},self.tickTime);
     };
 
         showPile(){
@@ -124,10 +98,10 @@ class Game {
     moveLeft() {
         this.part.clear();
         this.part.bottomCol--;
-        this.part.rotate();
+        this.part.assemble();
             if (this.part.checkLeftBoarder()||this.checkPartForPile()) {
                 this.part.bottomCol++;
-                this.part.rotate();
+                this.part.assemble();
         };
         this.part.show();
     };
@@ -135,10 +109,10 @@ class Game {
     moveRight() {
         this.part.clear();
         this.part.bottomCol++;
-        this.part.rotate();
+        this.part.assemble();
             if (this.part.checkRightBoarder()||this.checkPartForPile()) {
                 this.part.bottomCol--;
-                this.part.rotate();
+                this.part.assemble();
         };
         this.part.show();
     };
@@ -172,6 +146,11 @@ class Game {
                 this.pileColors.push(this.part.color);
             };
             this.removeFullRows();
+            this.part = this.nextPart;
+            if (this.checkPartForPile()){
+                clearInterval(this.ticktack); //Game Over
+                this.endgame();
+            };
             this.randomPart();
             this.showPile();
         };
@@ -195,18 +174,6 @@ class Game {
         return fullRows;
     };
 
- /*   removeRow(row){
-        this.pileClear();
-        for (var i = row; i > 0; i--){
-            for (var j = 0; j < table.rows[i].cells.length; j++){
-                table.rows[i].cells[j].style.backgroundColor = table.rows[i-1].cells[j].style.backgroundColor;
-            };
-        };
-        for (var i = 0; i < table.rows[0].cells.length; i++){
-            table.rows[0].cells[i].style.backgroundColor = 'white';
-        };
-    };*/
-
     removeFullRows(){
         this.clearPile();
         var fullRows = this.getFullRows();
@@ -220,9 +187,12 @@ class Game {
                         this.pileRows[j]++;
                     };
                 };
-                //this.removeRow(fullRows[i]);
             };
         this.showPile();
+    };
+
+    endgame(){
+
     };
 
     tick(){

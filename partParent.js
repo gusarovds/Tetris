@@ -8,17 +8,17 @@ class Part {
         this.dotRows = [];
         this.rotation = 0;
         this.color = 'red';
-        this.rotate();
+        this.assemble();
     };
 
     moveDown() {
         this.bottomRow++;
-        this.rotate();
+        this.assemble();
     };
 
     moveUp() {
         this.bottomRow--;
-        this.rotate();
+        this.assemble();
     };
 
     checkLeftBoarder(){
@@ -74,11 +74,11 @@ class Part {
         };
     };
 
-    rotate() {};
+    assemble() {};
 
-    changeRotationRight() { if (this.rotation < 3) {this.rotation++; this.rotate()} else {this.rotation = 0; this.rotate()} };
+    changeRotationRight() { if (this.rotation < 3) {this.rotation++; this.assemble()} else {this.rotation = 0; this.assemble()} };
 
-    changeRotationLeft() { if (this.rotation > 0) {this.rotation--; this.rotate()} else {this.rotation = 3; this.rotate()} };
+    changeRotationLeft() { if (this.rotation > 0) {this.rotation--; this.assemble()} else {this.rotation = 3; this.assemble()} };
 
 
 };
