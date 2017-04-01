@@ -9,10 +9,10 @@ class Opart extends Part {
         this.dotCols[1] = this.bottomCol;
          
         this.dotRows[2] = this.bottomRow;
-        this.dotCols[2] = this.bottomCol - 1;
+        this.dotCols[2] = this.bottomCol + 1;
          
         this.dotRows[3] = this.bottomRow - 1;
-        this.dotCols[3] = this.bottomCol - 1;
+        this.dotCols[3] = this.bottomCol + 1;
          
     };
 

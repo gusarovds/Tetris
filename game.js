@@ -8,6 +8,7 @@ class Game {
         this.randomPart();
         this.fieldColor = 'white';
         this.tickTime = 1100 - 100*speed;
+        this.scores = 0;
         var self = this;
         body.onkeydown = function(e){
             if (e.keyCode == 37){
@@ -22,6 +23,9 @@ class Game {
             if (e.keyCode == 40){
                 self.rotateRight();
             };
+            if (e.keyCode == 32){
+                self.moveMaxDown();
+            };
         };
     };
 
@@ -31,31 +35,31 @@ class Game {
         switch (rand) {
             case 0:
                 this.nextPart = new Opart(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'Crimson';
+                this.nextPart.color = 'PaleTurquoise';
                 break;
             case 1:
                 this.nextPart = new Ipart(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'BlueViolet';
+                this.nextPart.color = 'Plum';
                 break;
             case 2:
                 this.nextPart = new Tpart(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'DarkCyan';
+                this.nextPart.color = 'Pink';
                 break;
             case 3:
                 this.nextPart = new Zpart(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'DeepSkyBlue';
+                this.nextPart.color = 'Thistle';
                 break;
             case 4:
                 this.nextPart = new Lpart(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'LawnGreen';
+                this.nextPart.color = 'SkyBlue';
                 break;
             case 5:
                 this.nextPart = new ZpartRev(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'DarkOrange';
+                this.nextPart.color = 'PaleVioletRed';
                 break;
             case 6:
                 this.nextPart = new LpartRev(0,Math.floor(table.rows[1].cells.length/2-1));
-                this.nextPart.color = 'Tomato';
+                this.nextPart.color = 'Aquamarine';
                 break;
         };
     };
@@ -117,6 +121,14 @@ class Game {
         this.part.show();
     };
 
+    moveMaxDown(){
+        this.part.clear();
+        while ((!this.part.checkBotBoarder())&&(!this.checkPartForPile())){
+            this.part.moveDown();
+        };
+        this.addToPile();
+    };
+
     rotateLeft(){
         this.part.clear();
         this.part.changeRotationLeft();
@@ -135,9 +147,7 @@ class Game {
         this.part.show();
     };
 
-
     addToPile() {
-
         if ((this.part.checkBotBoarder())||(this.checkPartForPile())){
             this.part.moveUp();
             for (var i = 0; i < this.part.dotRows.length; i++ ){
@@ -158,9 +168,8 @@ class Game {
 
     getFullRows(){
         var fullRows = [];
-        var dotsInRow = 0;
         for (var i = 0; i < table.rows.length; i++){
-            dotsInRow = 0;
+            var dotsInRow = 0;
             for (var j = 0; j < this.pileRows.length; j++){
                 if (this.pileRows[j] == i) {
                     dotsInRow++;
@@ -170,12 +179,17 @@ class Game {
                 fullRows.push(i);
             };
         };
-        //alert(fullRows);
         return fullRows;
+    };
+
+    addScores(score,multiplier){
+        this.scores = this.scores + score*multiplier;
+        alert('score:' + this.scores);
     };
 
     removeFullRows(){
         this.clearPile();
+        var removedDots = 0;
         var fullRows = this.getFullRows();
             for (var i = 0; i < fullRows.length; i++) {
                 for (var j = this.pileRows.length; j >= 0; j--) {
@@ -183,16 +197,21 @@ class Game {
                         this.pileRows.splice(j, 1);
                         this.pileCols.splice(j, 1);
                         this.pileColors.splice(j, 1);
+                        removedDots++;
                     } else if (this.pileRows[j] < fullRows[i]) {
                         this.pileRows[j]++;
                     };
                 };
             };
+            if (fullRows.length > 0) {
+                this.addScores(removedDots, fullRows.length);
+            };
         this.showPile();
     };
 
-    endgame(){
 
+    endgame(){
+        alert('Game Over!');
     };
 
     tick(){

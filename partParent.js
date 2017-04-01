@@ -51,7 +51,7 @@ class Part {
     checkBotBoarder(){
         var check = false;
         for (var i = 0; i < this.dotRows.length; i++) {
-            if (this.dotRows[i] == table.rows.length) {
+            if (this.dotRows[i] >= table.rows.length) {
                 check = true;
             };
         };
