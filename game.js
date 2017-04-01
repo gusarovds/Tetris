@@ -69,7 +69,7 @@ class Game {
         this.ticktack = setInterval(function(){self.tick();},self.tickTime);
     };
 
-        showPile(){
+    showPile(){
         for (var i = 0; i < this.pileRows.length; i++){
             if (this.pileRows[i] >= 0) {
                 table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.pileColors[i];
@@ -219,8 +219,7 @@ class Game {
         this.part.moveDown();
         this.addToPile();
         this.part.show();
-
-
+        
     };
 
 };
