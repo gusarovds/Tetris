@@ -219,7 +219,6 @@ class Game {
         this.part.moveDown();
         this.addToPile();
         this.part.show();
-        
     };
 
 };
