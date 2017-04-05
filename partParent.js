@@ -8,6 +8,7 @@ class Part {
         this.dotRows = [];
         this.rotation = 0;
         this.color = 'red';
+        this.fieldColor = 'black';
         this.assemble();
     };
 
@@ -69,7 +70,7 @@ class Part {
     clear() {
         for (var i = 0; i < this.dotRows.length; i++){
             if ((this.checkTopBoarder(i))&&(this.dotRows[i] < table.rows.length)) {
-                table.rows[this.dotRows[i]].cells[this.dotCols[i]].style.backgroundColor = "white";
+                table.rows[this.dotRows[i]].cells[this.dotCols[i]].style.backgroundColor = this.fieldColor;
             };
         };
     };

@@ -1,32 +1,16 @@
 class Game {
-    constructor(speed){
+    constructor(){
+        this.competitive = false;
+        this.playerName = '';
         this.pileCols = [];
         this.pileRows = [];
         this.pileColors = [];
         this.randomPart();
         this.part = this.nextPart;
         this.randomPart();
-        this.fieldColor = 'white';
-        this.tickTime = 1100 - 100*speed;
+        this.fillWithColor();
         this.scores = 0;
-        var self = this;
-        body.onkeydown = function(e){
-            if (e.keyCode == 37){
-                self.moveLeft();
-            };
-            if (e.keyCode == 39){
-                self.moveRight();
-            };
-            if (e.keyCode == 38){
-                self.rotateLeft();
-            };
-            if (e.keyCode == 40){
-                self.rotateRight();
-            };
-            if (e.keyCode == 32){
-                self.moveMaxDown();
-            };
-        };
+        this.gameIsOn = false;
     };
 
     randomPart(){
@@ -64,9 +48,41 @@ class Game {
         };
     };
 
-    startGame(){
+    fillWithColor(){
+        for (var i = 0; i < table.rows.length; i++){
+          for (var j = 0; j < table.rows[i].cells.length; j++){
+              table.rows[i].cells[j].style.backgroundColor = this.part.fieldColor;
+          };
+        };
+    };
+
+    startGame(speed){
+        this.tickTime = Math.floor(1000/speed);
+        if (!this.gameIsOn) {
+            this.gameIsOn = true;
+            var self = this;
+            this.ticktack = setInterval(function () {
+                self.tick();
+            }, self.tickTime);
+        };
         var self = this;
-        this.ticktack = setInterval(function(){self.tick();},self.tickTime);
+        body.onkeydown = function(e){
+            if (e.keyCode == 37){
+                self.moveLeft();
+            };
+            if (e.keyCode == 39){
+                self.moveRight();
+            };
+            if (e.keyCode == 38){
+                self.rotateLeft();
+            };
+            if (e.keyCode == 40){
+                self.rotateRight();
+            };
+            if (e.keyCode == 32){
+                self.moveMaxDown();
+            };
+        };
     };
 
     showPile(){
@@ -80,7 +96,7 @@ class Game {
     clearPile(){
         for (var i = 0; i < this.pileRows.length; i++){
             if (this.pileRows[i] >= 0) {
-                table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.fieldColor;
+                table.rows[this.pileRows[i]].cells[this.pileCols[i]].style.backgroundColor = this.part.fieldColor;
             };
         };
     };
@@ -184,7 +200,6 @@ class Game {
 
     addScores(score,multiplier){
         this.scores = this.scores + score*multiplier;
-        alert('score:' + this.scores);
     };
 
     removeFullRows(){
@@ -211,7 +226,29 @@ class Game {
 
 
     endgame(){
-        alert('Game Over!');
+        this.gameIsOn = false;
+        alert('Game Over! Your score is: ' + this.scores);
+        this.pileCols = [];
+        this.pileRows = [];
+        this.pileColors = [];
+        this.randomPart();
+        this.part = this.nextPart;
+        this.randomPart();
+        this.fillWithColor();
+        var self = this;
+        body.onkeydown = function(e){
+            if (e.keyCode == 37){
+            };
+            if (e.keyCode == 39){
+            };
+            if (e.keyCode == 38){
+            };
+            if (e.keyCode == 40){
+            };
+            if (e.keyCode == 32){
+            };
+        };
+
     };
 
     tick(){
