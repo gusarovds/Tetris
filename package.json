@@ -1,0 +1,29 @@
+{
+  "name": "tetris",
+  "version": "1.0.0",
+  "description": "tetris js",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "deploy": "node_modules\\.bin\\now"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gusarovds/Tetris.git"
+  },
+  "author": "dimka gusarov",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/gusarovds/Tetris/issues"
+  },
+  "homepage": "https://github.com/gusarovds/Tetris#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "sqlite3": "^3.1.8"
+  },
+  "devDependencies": {
+    "now": "^4.10.3"
+  }
+}

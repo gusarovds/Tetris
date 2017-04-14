@@ -8,6 +8,7 @@ class Game {
         this.randomPart();
         this.part = this.nextPart;
         this.randomPart();
+        this.updateLeaderboard();
         this.fillWithColor();
         this.scores = 0;
         this.gameIsOn = false;
@@ -224,6 +225,40 @@ class Game {
         this.showPile();
     };
 
+    updateLeaderboard(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET','/data/leaderboard', true);
+        xhr.send();
+        xhr.onreadystatechange = function (e) {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var response = JSON.parse(xhr.responseText);
+                for (var i = 0; i < response.length; i++){
+                    leaderboard.rows[i].cells[0].textContent = response[i].playerName;
+                    leaderboard.rows[i].cells[1].textContent = response[i].score;
+                };
+            };
+        };
+    };
+
+    addResults(playerName, score){
+        var xhr = new XMLHttpRequest();   // new HttpRequest instance
+        xhr.open("POST", "/data/leaderboard");
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        var self = this;
+        xhr.onreadystatechange = processRequest;
+        function processRequest(e) {
+            console.log('data almost sent');
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log('data sent');
+                self.updateLeaderboard();
+            };
+        };
+        xhr.send(JSON.stringify({
+            playerName: playerName,
+            score: score
+        }));
+        //this.updateLeaderboard();
+    };
 
     endgame(){
         this.gameIsOn = false;
@@ -236,6 +271,9 @@ class Game {
         this.randomPart();
         this.fillWithColor();
         var self = this;
+        if (this.competitive){
+            this.addResults(this.playerName, this.scores);
+        };
         body.onkeydown = function(e){
             if (e.keyCode == 37){
             };
