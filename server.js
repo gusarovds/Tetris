@@ -3,6 +3,7 @@ var app = express();
 var path = require('path');
 var bodyParser = require('body-parser');
 var fs = require('fs');
+var logs = require('now-logs')('tetris-secret-key');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
@@ -19,10 +20,15 @@ app.listen(80, function () {
     db.run("CREATE TABLE IF NOT EXISTS leaderboard (playerName TEXT, score INT)");
 
 
-    function addToDb(playerName, score){
-        var stmt = db.prepare("INSERT INTO leaderboard (playerName, score) VALUES (?,?)");
-        stmt.run(playerName, score);
-        stmt.finalize();
+    function addToDb(playerName, score, callback){
+        try {
+            var stmt = db.prepare("INSERT INTO leaderboard (playerName, score) VALUES (?,?)");
+            stmt.run(playerName, score);
+            return 0;
+        } catch (e) {
+            return e;
+        }
+        callback()
     };
 
     function getTopResults(callback){
@@ -34,17 +40,32 @@ app.listen(80, function () {
             });
 
         }, function (err, row) {
-        callback(dbarr);
+        callback(err, dbarr);
         });
     };
 
     app.get('/data/leaderboard', function (req, res) {
-        getTopResults(function (topResults) {
-            res.json(topResults);
+
+        getTopResults(function (err, topResults) {
+            if (err){
+                res.status(503).json(err);
+            } else {
+                res.status(200).json(topResults);
+            }
 
         });
     });
     app.post('/data/leaderboard', function (req, res) {
-        addToDb(req.body.playerName, req.body.score);
+        var err = addToDb(req.body.playerName, req.body.score);
+        if (err){
+            res.status(503).json(err);
+        } else {
+            res.sendStatus(200);
+        }
     });
+
+    app.get('/favicon.ico', function(req, res) {
+        res.sendStatus(204);
+    });
+
 });

@@ -1,13 +1,12 @@
 class Game {
     constructor(){
-        this.competitive = false;
+        this.competitive = true;
         this.playerName = '';
         this.pileCols = [];
         this.pileRows = [];
         this.pileColors = [];
         this.randomPart();
         this.part = this.nextPart;
-        this.randomPart();
         this.updateLeaderboard();
         this.fillWithColor();
         this.scores = 0;
@@ -59,6 +58,13 @@ class Game {
 
     startGame(speed){
         this.tickTime = Math.floor(1000/speed);
+        this.pileCols = [];
+        this.pileRows = [];
+        this.pileColors = [];
+        this.randomPart();
+        this.part = this.nextPart;
+        this.randomPart();
+        this.fillWithColor();
         if (!this.gameIsOn) {
             this.gameIsOn = true;
             var self = this;
@@ -84,6 +90,7 @@ class Game {
                 self.moveMaxDown();
             };
         };
+        this.updateScores(0);
     };
 
     showPile(){
@@ -201,6 +208,12 @@ class Game {
 
     addScores(score,multiplier){
         this.scores = this.scores + score*multiplier;
+        this.updateScores(this.scores);
+    };
+
+    updateScores(score){
+        var str = 'Score: ' + score;
+        document.getElementById('scoreValue').innerHTML = str;
     };
 
     removeFullRows(){
@@ -243,13 +256,11 @@ class Game {
     addResults(playerName, score){
         var xhr = new XMLHttpRequest();   // new HttpRequest instance
         xhr.open("POST", "/data/leaderboard");
-        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.setRequestHeader("Content-Type", "application/json");
         var self = this;
         xhr.onreadystatechange = processRequest;
         function processRequest(e) {
-            console.log('data almost sent');
             if (xhr.readyState == 4 && xhr.status == 200) {
-                console.log('data sent');
                 self.updateLeaderboard();
             };
         };
@@ -257,19 +268,10 @@ class Game {
             playerName: playerName,
             score: score
         }));
-        //this.updateLeaderboard();
     };
 
     endgame(){
         this.gameIsOn = false;
-        alert('Game Over! Your score is: ' + this.scores);
-        this.pileCols = [];
-        this.pileRows = [];
-        this.pileColors = [];
-        this.randomPart();
-        this.part = this.nextPart;
-        this.randomPart();
-        this.fillWithColor();
         var self = this;
         if (this.competitive){
             this.addResults(this.playerName, this.scores);
@@ -286,7 +288,7 @@ class Game {
             if (e.keyCode == 32){
             };
         };
-
+        playButton.style.visibility = "initial";
     };
 
     tick(){
